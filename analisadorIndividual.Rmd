@@ -1,0 +1,34 @@
+---
+title: "Análise de Desempenho do Consultor"
+author: "Feito por Pedro Sodré Malini"
+date: "2024-11-22"
+output: pdf_document
+---
+
+```{r, include=FALSE}
+# Carregar as bibliotecas necessárias
+library(tidyverse)
+```
+
+# TOMA TUA ANÁLISE DE DESEMPENHO SEU CONSULTOR DE TECNOLOGIA FILHA DA PUTAAAAAAAAAAAAAA !!!!!!!!!!!!!!!!!!!
+## TO MALUCO PORRAAAAAAAAAAAAAAAAAAAA
+
+```{r, include=TRUE, echo=FALSE}
+
+# Carregar o arquivo CSV (substitua pelo caminho correto)
+data <- read.csv("exemplo.csv")
+
+# Processar os dados para o gráfico de pizza
+pizza_data <- data %>%
+  group_by(Dificuldade) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Criar o gráfico de pizza
+ggplot(pizza_data, aes(x = "", y = Percentage, fill = Dificuldade)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  labs(title = "Distribuição de Dificuldade de Suas Tasks",
+       fill = "Dificuldade") +
+  theme_void()
+```
