@@ -1,4 +1,4 @@
-Semana,Mês,Task,Dificuldade,Prioridade,Dias para fazer,Dias restantes em que a tarefa foi entregue,Número de Projetos que o membro está,Membro indicou algum impasse na semana?
+Semana,Mês,Task,Dificuldade,Prioridade,DiasParaFazer,DiasRestantes,Número de Projetos que o membro está,Impasse
 1,1,a,1,3,14,4,1,0
 1,1,b,2,3,7,2,2,0
 1,1,c,3,2,5,1,3,0

@@ -1,8 +1,11 @@
 ---
-title: "Análise de Desempenho do Consultor"
+title: "Análise de Desempenho do Consultor XXXXXX 123456"
 author: "Feito por Pedro Sodré Malini"
 date: "2024-11-22"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ```{r, include=FALSE}
@@ -10,25 +13,445 @@ output: pdf_document
 library(tidyverse)
 ```
 
-# TOMA TUA ANÁLISE DE DESEMPENHO SEU CONSULTOR DE TECNOLOGIA FILHA DA PUTAAAAAAAAAAAAAA !!!!!!!!!!!!!!!!!!!
-## TO MALUCO PORRAAAAAAAAAAAAAAAAAAAA
+```{r, include=TRUE, echo=FALSE, results='asis'}
 
-```{r, include=TRUE, echo=FALSE}
+# Carregar bibliotecas
+library(ggplot2)
 
-# Carregar o arquivo CSV (substitua pelo caminho correto)
-data <- read.csv("exemplo.csv")
+# Carregar os dados
+dados <- read.csv("exemplo.csv")
 
-# Processar os dados para o gráfico de pizza
-pizza_data <- data %>%
-  group_by(Dificuldade) %>%
-  summarise(Count = n()) %>%
-  mutate(Percentage = Count / sum(Count) * 100)
+# Criar o histograma de dificuldades por task
+ggplot(dados, aes(x = factor(Dificuldade) ) ) +
+  geom_bar(width = 0.2, fill = c("cyan", "green", "darkred"), color = "black") +
+  scale_x_discrete(labels = c("1" = "Fácil", "2" = "Médio", "3" = "Difícil")) +
+  labs(title = "Frequência de Dificuldades por Tasks",
+       x = "Nível de Dificuldade",
+       y = "Frequência") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 
-# Criar o gráfico de pizza
-ggplot(pizza_data, aes(x = "", y = Percentage, fill = Dificuldade)) +
-  geom_bar(stat = "identity", width = 1) +
-  coord_polar(theta = "y") +
-  labs(title = "Distribuição de Dificuldade de Suas Tasks",
+media_dificuldade <- mean(dados$Dificuldade, na.rm = TRUE)
+
+mensagem <- paste0("\\Large A média das dificuldades é: ", round(media_dificuldade, 2))
+
+cat(mensagem)
+
+
+```
+
+
+
+```{r include=TRUE, echo=FALSE, results='asis'}
+
+# Carregar os dados
+dados <- read.csv("exemplo.csv")
+
+media_dias_restantes <- mean(dados$DiasRestantes, na.rm = TRUE)
+mediana_dias_restantes <- median(dados$DiasRestantes, na.rm = TRUE)
+desvio_padrao_dias_restantes <- sd(dados$DiasRestantes, na.rm = TRUE)
+
+
+# Criar o histograma de dificuldades por task
+ggplot(dados, aes(x = factor(DiasRestantes) ) ) +
+  geom_bar(width = 0.2, color = "black") +
+  labs(title = "Frequência de Dias Restantes em que a Task foi entregue",
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+
+# Criar texto com quebras de linha para PDF usando LaTeX
+mensagem <- paste0("\\Large A média dos dias restantes é: ", round(media_dias_restantes, 2), " \\\\\n",
+                   "A mediana dos dias restantes é: ", mediana_dias_restantes, " \\\\\n",
+                   "O desvio padrão dos dias restantes é: ", round(desvio_padrao_dias_restantes, 2))
+
+# Usar asis_output para saída LaTeX bruta
+cat(mensagem)
+
+```
+
+
+# Relação dias restantes para entregar e Dificuldade das Tasks
+```{r include=TRUE, echo=FALSE, results='asis'}
+
+# Carregar os dados
+dados <- read.csv("exemplo.csv")
+
+# Filtrar dados para Dificuldade 1
+dados_dif_1 <- dados %>% filter(Dificuldade == 1)
+media_dias_restantes1 <- mean(dados_dif_1$DiasRestantes, na.rm = TRUE)
+
+# Filtrar dados para Dificuldade 2
+dados_dif_2 <- dados %>% filter(Dificuldade == 2)
+
+media_dias_restantes2 <- mean(dados_dif_2$DiasRestantes, na.rm = TRUE)
+
+# Filtrar dados para Dificuldade 3
+dados_dif_3 <- dados %>% filter(Dificuldade == 3)
+
+media_dias_restantes3 <- mean(dados_dif_3$DiasRestantes, na.rm = TRUE)
+
+# Gráfico para Dificuldade 1
+ggplot(dados_dif_1, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "cyan", color = "black") +
+  labs(title = "Gráfico de Dias Restantes Dificuldade Baixa",
+       caption = paste("A média dos dias restantes é: ", round(media_dias_restantes1, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+# Gráfico para Dificuldade 2
+ggplot(dados_dif_2, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "green", color = "black") +
+  labs(title = "Gráfico de Dias Restantes Dificuldade Média",
+       caption = paste("A média dos dias restantes é: ", round(media_dias_restantes2, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+# Gráfico para Dificuldade 3
+ggplot(dados_dif_3, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "darkred", color = "black") +
+  labs(title = "Gráfico de Dias Restantes Dificuldade Alta",
+       caption = paste("A média dos dias restantes é: ", round(media_dias_restantes3, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+```
+
+# Prioridades das Tarefas executada pelos membros
+
+```{r include=TRUE, echo=FALSE, results='asis'}
+
+dados <- read.csv("exemplo.csv")
+
+# Criar o histograma de dificuldades por task
+ggplot(dados, aes(x = factor(Prioridade) ) ) +
+  geom_bar(width = 0.2, fill = c("cyan", "green", "darkred"), color = "black") +
+  scale_x_discrete(labels = c("1" = "Baixa", "2" = "Média", "3" = "Alta")) +
+  labs(title = "Frequência de Prioridades por Tasks",
+       x = "Nível de Prioridade",
+       y = "Frequência") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+media_dificuldade <- mean(dados$Prioridade, na.rm = TRUE)
+mediana_dificuldade <- median(dados$Prioridade, na.rm = TRUE)
+desvio_dificuldade <- sd(dados$Prioridade, na.rm = TRUE)
+
+mensagem <- paste0("\\Large A média das Prioridades é: ", round(media_dificuldade, 2), " \\\\\n",
+                   "A mediana das Prioridades é: ", mediana_dificuldade, " \\\\\n",
+                   "O desvio padrão das Prioridades é: ", round(desvio_dificuldade, 2))
+
+cat(mensagem)
+
+```
+
+# Relação Prioridade das Tarefas x Dias Restantes Para Entregar
+```{r include=TRUE, echo=FALSE, results='asis'}
+
+# Filtrar e calcular médias para Prioridade 1
+dados_prio_1 <- dados %>% filter(Prioridade == 1)
+media_prio_1 <- mean(dados_prio_1$DiasRestantes, na.rm = TRUE)
+
+# Filtrar e calcular médias para Prioridade 2
+dados_prio_2 <- dados %>% filter(Prioridade == 2)
+media_prio_2 <- mean(dados_prio_2$DiasRestantes, na.rm = TRUE)
+
+# Filtrar e calcular médias para Prioridade 3 (Alta)
+dados_prio_3 <- dados %>% filter(Prioridade == 3)
+media_prio_3 <- mean(dados_prio_3$DiasRestantes, na.rm = TRUE)
+
+# Gráfico para Prioridade 1
+ggplot(dados_prio_1, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "blue", color = "black") +
+  labs(title = "Gráfico de Dias Restantes : Prioridade Baixa",
+       caption = paste("A média dos dias restantes é: ", round(media_prio_1, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+# Gráfico para Prioridade 2
+ggplot(dados_prio_2, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "green", color = "black") +
+  labs(title = "Gráfico de Dias Restantes : Prioridade Média",
+       caption = paste("A média dos dias restantes é: ", round(media_prio_2, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+# Gráfico para Prioridade 3 (Alta)
+ggplot(dados_prio_3, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "darkred", color = "black") +
+  labs(title = "Gráfico de Dias Restantes : Prioridade Alta",
+       caption = paste("A média dos dias restantes é: ", round(media_prio_3, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+```
+
+
+# Relação dias para fazer a tarefa X Dias Restantes para entregar
+```{r include=TRUE, echo=FALSE, results='asis'}
+# Carregar os dados
+dados <- read.csv("exemplo.csv")
+
+
+# 2. Criar uma nova coluna baseada em "DiasParaFazer"
+dados <- dados %>%
+  mutate(NovaColuna = case_when(
+    DiasParaFazer > 7 ~ 3,  # Mais de 7 dias para fazer
+    DiasParaFazer < 7 ~ 1,  # Menos de 7 dias para fazer
+    DiasParaFazer == 7 ~ 2  # 7 dias para fazer
+  ))
+
+# 3. Gráficos para cada valor possível da nova coluna
+# Filtrar e criar gráficos
+
+# Para valores iguais a 1
+dados_1 <- dados %>% filter(NovaColuna == 1)
+media1 <- mean(dados_1$DiasRestantes, na.rm = TRUE)
+ggplot(dados_1, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "darkred", color = "black") +
+  labs(title = "Frequência de Dias Restantes : Menos de 7 Dias para Fazer",
+       caption = paste("A média dos dias restantes é: ", round(media1, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+# Para valores iguais a 2
+dados_2 <- dados %>% filter(NovaColuna == 2)
+media2 <- mean(dados_2$DiasRestantes, na.rm = TRUE)
+ggplot(dados_2, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "green", color = "black") +
+  labs(title = "Frequência de Dias Restantes : 7 Dias para Fazer",
+       caption = paste("A média dos dias restantes é: ", round(media2, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+# Para valores iguais a 3
+dados_3 <- dados %>% filter(NovaColuna == 3)
+media3 <- mean(dados_3$DiasRestantes, na.rm = TRUE)
+ggplot(dados_3, aes(x = factor(DiasRestantes))) +
+  geom_bar(width = 0.5, fill = "cyan", color = "black") +
+  labs(title = "Frequência de Dias Restantes : Mais de 7 Dias para Fazer",
+       caption = paste("A média dos dias restantes é: ", round(media3, 2)),
+       x = "Dias Restantes",
+       y = "Frequência") +
+  theme_minimal()
+
+```
+
+# Análise de Entregas Atrasadas
+```{r include=TRUE, echo=FALSE, results='asis'}
+# receber os dados
+dados <- read.csv("exemplo.csv")
+
+#FIltrar dados atrasados
+dados_filtrados = dados %>% filter(DiasRestantes < 0)
+
+#Ver se o membro Justificou Ou Não
+# Gráfico mostrando se o usuário justificou
+ggplot(dados_filtrados, aes(x = factor(Impasse), fill=factor(Impasse))) +
+  geom_bar( color = "black") +
+  scale_fill_manual(values = c("0" = "darkred", "1" = "cyan"),
+                     , labels = c("1" = "Justificou", "0" = "Não Justificou")) +
+  scale_x_discrete(labels = c("0" = "Não Justificou", "1" = "Justificou")) +
+  labs(title = "Justificativa de Impasse para Dias Restantes Negativos",
+       x = "Justificou?",
+       y = "Frequência") +
+  theme_minimal()
+
+# Gráfico filtrando por dificuldade
+ggplot(dados_filtrados, aes(x = factor(Dificuldade), fill = factor(Dificuldade))) +
+  geom_bar( color = "black") +
+  scale_fill_manual(values = c("3" = "darkred", "2" = "red", "1" = "orange"),
+                    , labels = c("1" = "Baixa", "2" = "Média", "3" = "Alta")) +
+  scale_x_discrete(labels = c("1" = "Baixa", "2" = "Média", "3" = "Alta")) +
+  labs(title = "Dificuldade das Tarefas com Dias Restantes Negativos",
+       x = "Dificuldade",
+       y = "Frequência",
        fill = "Dificuldade") +
-  theme_void()
+  theme_minimal()
+
+# Criar uma nova coluna categorizando DiasParaFazer
+dados_filtrados <- dados_filtrados %>%
+  mutate(DiasParaFazerCategoria = case_when(
+    DiasRestantes > 7 ~ "Mais de 7 Dias",
+    DiasRestantes < 7 ~ "Menos de 7 Dias",
+    DiasRestantes == 7 ~ "7 Dias"
+  ))
+
+# Gráfico filtrando por categoria de DiasParaFazer
+ggplot(dados_filtrados, aes(x = factor(DiasParaFazerCategoria), fill = factor(DiasParaFazerCategoria) )) +
+  geom_bar( color = "black") +
+  scale_fill_manual(values = c("Mais de 7 Dias" = "darkred", "7 Dias" = "red", "Menos de 7 Dias" = "orange")) +
+  labs(title = "Tarefas com Dias Restantes Negativos por Categoria de Dias Para Fazer",
+       x = "Categoria de Dias Para Fazer",
+       y = "Frequência",
+       fill="Dias Para Fazer") +
+  theme_minimal()
+
+# Gráfico filtrando por prioridade
+ggplot(dados_filtrados, aes(x = factor(Prioridade), fill=factor(Prioridade))) +
+  geom_bar(color = "black") +
+  scale_fill_manual(values = c("1" = "darkred", "2" = "red", "3" = "orange"),
+                    labels = c("1" = "Baixa", "2" = "Média", "3" = "Alta")
+                    ) +
+  scale_x_discrete(labels = c("1" = "Baixa", "2" = "Média", "3" = "Alta")) +
+  labs(title = "Prioridade das Tarefas com Dias Restantes Negativos",
+       x = "Prioridade",
+       y = "Frequência",
+       fill="Prioridades") +
+  theme_minimal()
+
+# Filtrar tarefas atrasadas (DiasRestantes < 0)
+tarefas_atrasadas <- dados %>% filter(DiasRestantes < 0)
+
+# Printar as informações relevantes
+tarefas_atrasadas %>%
+  select(Task, Impasse, DiasRestantes, Dificuldade, Prioridade) %>%
+  rowwise() %>%
+  mutate(Informacao = paste("Task:", Task, 
+                            "- Justificou:", Impasse,
+                            "- Dias Restantes:", DiasRestantes,
+                            "- Dificuldade da Task:", Dificuldade,
+                            "- Prioridade:", Prioridade,
+                            "||||||||")) %>%
+  pull(Informacao) %>%
+  cat(sep = "\n")
+```
+
+# ESPAÇO PARA COMENTÁRIOS DO GERENTE
+## At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+
+# Análise mês a mês
+
+```{r setup, include=TRUE, echo=FALSE, results='asis'}
+
+# Carregar os dados
+dados <- read.csv("exemplo.csv")
+
+# Loop para gerar análises mês a mês
+for (mes in 1:12) {
+  
+  # Filtrar os dados para o mês atual
+  dados_mes <- dados %>% filter(Mês == mes)
+  if (nrow(dados_mes) == 0) {
+    cat(paste("Não há dados para o mês", mes, "\n\n"))
+    next  # Pula para o próximo mês no loop
+  }
+  
+  cat("\\newpage")  # Adiciona nova página no PDF
+  cat("\\section*{Análise do Mês: ", mes, "}\n\n")
+  
+  # -------------------- GRÁFICO 1: FREQUÊNCIA DE DIFICULDADES --------------------
+  grafico_dificuldade <- ggplot(dados_mes, aes(x = factor(Dificuldade), fill = factor(Dificuldade))) +
+    geom_bar(color = "black") +
+    scale_fill_manual(values = c("1" = "cyan", "2" = "green", "3" = "darkred")) +
+    scale_x_discrete(labels = c("1" = "Fácil", "2" = "Médio", "3" = "Difícil")) +
+    labs(title = paste("Frequência de Dificuldades por Tasks - Mês", mes),
+         x = "Nível de Dificuldade",
+         y = "Frequência",
+         fill = "Dificuldade") +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5))
+  print(grafico_dificuldade)
+  
+  # -------------------- GRÁFICO 2: FREQUÊNCIA DE PRIORIDADES --------------------
+  grafico_prioridade <- ggplot(dados_mes, aes(x = factor(Prioridade), fill = factor(Prioridade))) +
+  geom_bar(color = "black") +
+  scale_fill_manual(values = c("1" = "cyan", "2" = "green", "3" = "darkred")) +
+  scale_x_discrete(labels = c("1" = "Baixa", "2" = "Média", "3" = "Alta")) +
+  labs(title = paste("Frequência de Prioridades por Tasks - Mês", mes),
+       x = "Nível de Prioridade",
+       y = "Frequência",
+       fill = "Prioridade") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+  # Exibir o gráfico
+  print(grafico_prioridade)
+
+  
+  # -------------------- GRÁFICO 3: DIAS RESTANTES X DIFICULDADES --------------------
+  for (dificuldade in 1:3) {
+    dados_dif <- dados_mes %>% filter(Dificuldade == dificuldade)
+    media_dias <- mean(dados_dif$DiasRestantes, na.rm = TRUE)
+    
+    grafico_dias <- ggplot(dados_dif, aes(x = factor(DiasRestantes))) +
+      geom_bar(width = 0.5, fill = c("cyan", "green", "darkred")[dificuldade], color = "black") +
+      labs(title = paste("Gráfico de Dias Restantes - Dificuldade", dificuldade, "- Mês", mes),
+           caption = paste("A média dos dias restantes é: ", round(media_dias, 2)),
+           x = "Dias Restantes",
+           y = "Frequência") +
+      theme_minimal()
+    print(grafico_dias)  # Exibir o gráfico
+  }
+  
+  # -------------------- GRÁFICO 4: DIAS PARA FAZER --------------------
+  dados_mes <- dados_mes %>%
+    mutate(NovaColuna = case_when(
+      DiasParaFazer > 7 ~ "Mais de 7 Dias",
+      DiasParaFazer == 7 ~ "7 Dias",
+      DiasParaFazer < 7 ~ "Menos de 7 Dias"
+    ))
+  
+  grafico_dias_para_fazer <- ggplot(dados_mes, aes(x = NovaColuna, fill = NovaColuna)) +
+    geom_bar(color = "black") +
+    scale_fill_manual(values = c("Mais de 7 Dias" = "cyan", "7 Dias" = "green", "Menos de 7 Dias" = "darkred")) +
+    labs(title = paste("Tarefas por Categoria de Dias Para Fazer - Mês", mes),
+         x = "Categoria de Dias Para Fazer",
+         y = "Frequência",
+         fill = "Dias Para Fazer") +
+    theme_minimal()
+  print(grafico_dias_para_fazer)  # Exibir o gráfico
+
+    # -------------------- GRÁFICO 5: JUSTIFICATIVAS PARA ATRASOS --------------------
+  # Filtrar dados para tarefas atrasadas
+  dados_atrasados <- dados_mes %>% filter(DiasRestantes < 0)
+
+  # Verificar se há dados atrasados antes de gerar o gráfico
+  if (nrow(dados_atrasados) > 0) {
+  
+    # Gráfico de justificativa de impasse
+    grafico_impasse <- ggplot(dados_atrasados, aes(x = factor(Impasse), fill = factor(Impasse))) +
+      geom_bar(color = "black") +
+      scale_fill_manual(values = c("0" = "darkred", "1" = "cyan"),
+                        labels = c("0" = "Não Justificou", "1" = "Justificou")) +
+      scale_x_discrete(labels = c("0" = "Não Justificou", "1" = "Justificou")) +
+      labs(title = paste("Justificativa de Impasse para Tarefas Atrasadas - Mês", mes),
+           x = "Justificou?",
+           y = "Frequência",
+           fill = "Impasse") +
+      theme_minimal()
+  
+  print(grafico_impasse)
+  
+  # Criar tabela de tarefas atrasadas
+  tarefas_atrasadas <- dados_atrasados %>%
+    select(Task, Impasse, DiasRestantes, Dificuldade, Prioridade) %>%
+    rowwise() %>%
+    mutate(Informacao = paste("Task:", Task,
+                              "- Justificou:", Impasse,
+                              "- Dias Restantes:", DiasRestantes,
+                              "- Dificuldade:", Dificuldade,
+                              "- Prioridade:", Prioridade)) %>%
+    pull(Informacao)
+  
+  cat(tarefas_atrasadas, sep = "\n")
+  
+} else {
+  # Mensagem se não houver dados atrasados
+  cat(paste("Não há tarefas atrasadas para o mês", mes, "\n\n"))
+}
+  
+}
+
+
 ```
